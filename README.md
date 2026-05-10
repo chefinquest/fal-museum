@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# FAL Museum
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive browser museum that uses **fal.ai generative media models** as the art pipeline and **React Three Fiber / Three.js** as the delivery surface. The goal is to show how quickly a growth engineer can turn a model ecosystem into a polished, shareable demo with documentation.
 
-Currently, two official plugins are available:
+## Why this exists
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+fal's Growth Engineer role asks for someone who can sit between engineering, product, and GTM: ship prototypes quickly, write persuasive technical content, debug customer touchpoints, and turn experiments into qualified activation. This project is a concrete demo of that operating style.
 
-## React Compiler
+## What it demonstrates
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Fast prototype shipping:** a Vite + React + TypeScript app with a walkable 3D environment.
+- **Generative media fluency:** six distinct artworks generated through different fal model families.
+- **Developer-tool mindset:** the project records prompts, models, outputs, and docs instead of treating generation as a black box.
+- **Content + demo thinking:** includes an in-app `/docs` route so the demo can double as a technical teardown.
+- **Customer empathy:** first-person controls, labels, plaques, and a simple gallery narrative make the technology approachable.
 
-## Expanding the ESLint configuration
+## Model inventory
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `fal-ai/fast-sdxl` — Stable Diffusion XL — *Nocturne of Glass Orchards*
+- `fal-ai/flux/schnell` — FLUX.1 schnell — *Brutalist Sun Garden*
+- `fal-ai/recraft/v3/text-to-image` — Recraft V3 — *The Velvet Machine*
+- `fal-ai/imagen3/fast` — Imagen3 Fast — *Rain Room Sonata*
+- `fal-ai/ideogram/v2a/turbo` — Ideogram V2A Turbo — *A Map of Quiet Thunder*
+- `fal-ai/flux-2/flash` — Flux 2 Flash — *Porcelain Aurora*
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+The complete metadata lives in `src/artworks.json`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Tech stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React 19
+- TypeScript
+- Vite
+- Three.js
+- React Three Fiber
+- Drei
+- Marked for docs rendering
+
+## Running locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Museum: `http://localhost:5173/`
+- Docs: `http://localhost:5173/docs`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Build
+
+```bash
+npm run build
 ```
+
+Current production build passes. Vite reports a large Three.js bundle warning, which is expected for the prototype and is a clear next optimization target.
+
+## Recruiter / interview talking points
+
+If discussing this project with fal:
+
+1. **Start with the role fit:** "I built this because the role is not just backend engineering; it is engineering plus distribution. I wanted something that shows prototype speed, model fluency, and storytelling."
+2. **Show the model list:** emphasize that the artworks use six different fal endpoints and that the app preserves model/prompt provenance.
+3. **Explain the growth angle:** the next step would be instrumentation: activation funnel, time-to-first-interaction, click-through from docs to signup, and cohort comparison across demos.
+4. **Be honest about gaps:** this is a polished prototype, not a production product. The next work would be deployment, analytics, performance/code-splitting, mobile controls, and a stronger share loop.
+
+## Next improvements
+
+- Deploy publicly on `chefin.quest` or a dedicated project URL.
+- Add analytics events for docs visits, first pointer-lock, artwork focus, and outbound fal CTA clicks.
+- Add a short technical blog post: "Building a generative AI museum with six fal models."
+- Code-split the 3D scene to reduce initial bundle weight.
+- Add a gallery mode for mobile users.
