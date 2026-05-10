@@ -397,7 +397,7 @@ function MuseumApp() {
       <div className="hud">
         <div><Sparkles size={16}/> FAL Museum</div>
         <div>Click start · WASD move · mouse/drag look · Shift sprint · Esc unlock</div>
-        <a href={assetUrl('docs')}>Docs</a>
+        <a href={`${BASE_PATH}?docs`}>Docs</a>
       </div>
       {!controlsActive && <button className="enter" onClick={enterMuseum}><MousePointer2/> Click to walk the museum</button>}
       {controlsActive && <div className="crosshair" aria-hidden="true" />}
@@ -446,5 +446,5 @@ function DocsApp() {
 }
 
 export default function App() {
-  return location.pathname.startsWith(assetUrl('docs')) || location.pathname === '/docs' ? <DocsApp /> : <MuseumApp />
+  return location.search === '?docs' || location.pathname === '/docs' ? <DocsApp /> : <MuseumApp />
 }

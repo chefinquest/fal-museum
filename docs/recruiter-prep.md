@@ -29,6 +29,7 @@ Use this frame:
 
 Repository: `https://github.com/chefinquest/fal-museum`
 Live demo: `https://chefinquest.github.io/fal-museum/`
+Live docs: `https://chefinquest.github.io/fal-museum/?docs`
 
 What it proves:
 
