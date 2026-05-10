@@ -44,8 +44,9 @@ npm run dev
 
 Open:
 
-- Museum: `http://localhost:5173/`
-- Docs: `http://localhost:5173/docs`
+- Live demo: `https://chefinquest.github.io/fal-museum/`
+- Local museum: `http://localhost:5173/`
+- Local docs: `http://localhost:5173/docs`
 
 ## Build
 

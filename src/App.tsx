@@ -24,6 +24,9 @@ type Placement = Artwork & {
   lightPosition: [number, number, number]
 }
 
+const BASE_PATH = import.meta.env.BASE_URL
+const assetUrl = (path: string) => `${BASE_PATH}${path.replace(/^\//, '')}`
+
 const ROOM = 22
 const HALF = ROOM / 2
 // 15.5 world units reads as ~50+ ft at human eye scale.
@@ -282,7 +285,7 @@ function FutureTrim() {
 }
 
 function ArtworkFrame({ art }: { art: Placement }) {
-  const texture = useTexture(art.src)
+  const texture = useTexture(assetUrl(art.src))
   texture.colorSpace = THREE.SRGBColorSpace
   return (
     <group position={art.position} rotation={art.rotation}>
@@ -394,7 +397,7 @@ function MuseumApp() {
       <div className="hud">
         <div><Sparkles size={16}/> FAL Museum</div>
         <div>Click start · WASD move · mouse/drag look · Shift sprint · Esc unlock</div>
-        <a href="/docs">Docs</a>
+        <a href={assetUrl('docs')}>Docs</a>
       </div>
       {!controlsActive && <button className="enter" onClick={enterMuseum}><MousePointer2/> Click to walk the museum</button>}
       {controlsActive && <div className="crosshair" aria-hidden="true" />}
@@ -428,12 +431,12 @@ function DocsApp() {
   const [doc, setDoc] = useState(docLinks[0][0])
   const [html, setHtml] = useState('')
   useEffect(() => {
-    fetch(`/docs/${doc}`).then(r => r.text()).then(t => setHtml(marked.parse(t) as string))
+    fetch(assetUrl(`docs/${doc}`)).then(r => r.text()).then(t => setHtml(marked.parse(t) as string))
   }, [doc])
   return (
     <main className="docs-shell">
       <aside>
-        <a className="back" href="/"><BookOpen size={17}/> Museum</a>
+        <a className="back" href={BASE_PATH}><BookOpen size={17}/> Museum</a>
         <h1>Docs</h1>
         {docLinks.map(([file, title]) => <button key={file} className={doc === file ? 'active' : ''} onClick={() => setDoc(file)}>{title}</button>)}
       </aside>
@@ -443,5 +446,5 @@ function DocsApp() {
 }
 
 export default function App() {
-  return location.pathname.startsWith('/docs') ? <DocsApp /> : <MuseumApp />
+  return location.pathname.startsWith(assetUrl('docs')) || location.pathname === '/docs' ? <DocsApp /> : <MuseumApp />
 }

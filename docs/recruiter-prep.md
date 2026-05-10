@@ -28,6 +28,7 @@ Use this frame:
 ### 1. FAL Museum
 
 Repository: `https://github.com/chefinquest/fal-museum`
+Live demo: `https://chefinquest.github.io/fal-museum/`
 
 What it proves:
 
