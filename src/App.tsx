@@ -154,8 +154,8 @@ function PlayerControls({ active }: { active: boolean }) {
       velocity.current.set(0, 0, 0)
       return
     }
-    const forward = Number(keys.current.KeyW || keys.current.ArrowUp) - Number(keys.current.KeyS || keys.current.ArrowDown)
-    const right = Number(keys.current.KeyD || keys.current.ArrowRight) - Number(keys.current.KeyA || keys.current.ArrowLeft)
+    const forward = Number(Boolean(keys.current.KeyW || keys.current.ArrowUp)) - Number(Boolean(keys.current.KeyS || keys.current.ArrowDown))
+    const right = Number(Boolean(keys.current.KeyD || keys.current.ArrowRight)) - Number(Boolean(keys.current.KeyA || keys.current.ArrowLeft))
     const sprint = keys.current.ShiftLeft || keys.current.ShiftRight ? 1.7 : 1
     const dir = new THREE.Vector3(right, 0, -forward)
     if (dir.lengthSq() > 0) dir.normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw.current)
@@ -255,7 +255,7 @@ function SculpturalDetails() {
       <mesh castShadow position={[-3.0, 1.66, -.42]} rotation={[.2,0,.35]}><sphereGeometry args={[.22, 32, 16]} /><meshStandardMaterial color="#d0d4d5" roughness={.5} /></mesh>
       <mesh castShadow receiveShadow position={[3.9, .22, 2.2]}><boxGeometry args={[1.8,.44,.72]} /><meshStandardMaterial color="#8d6746" roughness={.48} /></mesh>
       <mesh castShadow receiveShadow position={[3.9,.64,2.2]}><boxGeometry args={[1.65,.12,.64]} /><meshStandardMaterial color="#c7aa83" roughness={.5} /></mesh>
-      <mesh castShadow receiveShadow position={[0, .03, 0]}><circleGeometry args={[2.35, 64]} /><meshStandardMaterial color="#d8c8a6" roughness={.8} /></mesh>
+      <mesh receiveShadow position={[0, .012, 0]} rotation-x={-Math.PI / 2}><circleGeometry args={[2.35, 64]} /><meshStandardMaterial color="#d8c8a6" roughness={.8} side={THREE.DoubleSide} /></mesh>
     </group>
   )
 }
