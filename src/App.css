@@ -1,0 +1,43 @@
+* { box-sizing: border-box; }
+html, body, #root { width: 100%; height: 100%; margin: 0; }
+body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #111; color: #f7f2e8; }
+a { color: inherit; }
+button { font: inherit; }
+
+.museum-shell { position: fixed; inset: 0; overflow: hidden; background: #15120f; }
+.museum-shell canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+.hud { position: fixed; z-index: 4; top: 18px; left: 18px; right: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; pointer-events: none; color: #fff7e8; text-shadow: 0 1px 16px rgba(0,0,0,.45); font-size: 13px; letter-spacing: .02em; }
+.hud div, .hud a { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,.14); background: rgba(16,13,10,.42); backdrop-filter: blur(16px); border-radius: 999px; padding: 10px 13px; box-shadow: 0 10px 30px rgba(0,0,0,.14); }
+.hud a { pointer-events: auto; text-decoration: none; }
+.enter { position: fixed; z-index: 5; left: 50%; top: 50%; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 12px; padding: 17px 22px; border-radius: 999px; border: 1px solid rgba(255,255,255,.3); color: #241b12; background: linear-gradient(180deg, #fff7e7, #dac29b); box-shadow: 0 30px 90px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.8); cursor: pointer; font-weight: 700; }
+.art-label { width: 250px; text-align: center; color: #21190f; line-height: 1.08; pointer-events: none; }
+.art-label strong { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 15px; letter-spacing: -.01em; margin-bottom: 4px; }
+.art-label span { display: block; font-size: 9.5px; text-transform: uppercase; letter-spacing: .12em; opacity: .7; }
+
+.docs-shell { min-height: 100vh; display: grid; grid-template-columns: 280px minmax(0, 1fr); background: #faf9f6; color: #171512; }
+.docs-shell aside { position: sticky; top: 0; height: 100vh; border-right: 1px solid #e8e1d3; background: #f4efe6; padding: 28px 18px; }
+.docs-shell aside h1 { margin: 26px 10px 14px; font-size: 28px; letter-spacing: -.04em; }
+.docs-shell aside button, .docs-shell .back { width: 100%; display: flex; align-items: center; gap: 9px; text-align: left; border: 0; background: transparent; color: #5a5042; padding: 10px 12px; border-radius: 12px; text-decoration: none; cursor: pointer; }
+.docs-shell aside button.active, .docs-shell aside button:hover, .docs-shell .back:hover { background: #e9dfcf; color: #171512; }
+.docs-shell article { max-width: 920px; padding: 56px 72px 96px; }
+.docs-shell article h1 { font-size: 42px; letter-spacing: -.055em; margin: 0 0 12px; }
+.docs-shell article h2 { font-size: 25px; letter-spacing: -.035em; margin-top: 38px; border-top: 1px solid #ece4d8; padding-top: 26px; }
+.docs-shell article h3 { font-size: 18px; margin-top: 26px; }
+.docs-shell article p, .docs-shell article li { color: #4e463c; line-height: 1.68; }
+.docs-shell article code { background: #eee6d8; color: #34271a; border-radius: 6px; padding: 2px 6px; font-size: .92em; }
+.docs-shell article pre { overflow-x: auto; background: #171512; color: #f5eddf; padding: 18px; border-radius: 16px; box-shadow: 0 16px 44px rgba(40,30,18,.12); }
+.docs-shell article pre code { background: transparent; color: inherit; padding: 0; }
+.docs-shell article blockquote { margin: 22px 0; border-left: 4px solid #b99762; padding: 8px 18px; background: #f3ecdf; border-radius: 0 14px 14px 0; }
+.docs-shell article table { width: 100%; border-collapse: collapse; margin: 22px 0 28px; font-size: 14px; overflow: hidden; border-radius: 14px; box-shadow: 0 0 0 1px #e8dfd0; }
+.docs-shell article th, .docs-shell article td { text-align: left; padding: 11px 13px; border-bottom: 1px solid #e8dfd0; vertical-align: top; }
+.docs-shell article th { background: #efe5d5; color: #2c241b; font-weight: 700; }
+.docs-shell article tr:nth-child(even) td { background: #f7f1e8; }
+.docs-shell article tr:last-child td { border-bottom: 0; }
+
+@media (max-width: 760px) {
+  .hud { align-items: flex-start; flex-direction: column; }
+  .hud div:nth-child(2) { display: none; }
+  .docs-shell { display: block; }
+  .docs-shell aside { position: relative; height: auto; border-right: 0; border-bottom: 1px solid #e8e1d3; }
+  .docs-shell article { padding: 32px 22px 72px; }
+}

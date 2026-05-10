@@ -1,0 +1,62 @@
+[
+  {
+    "id": "north",
+    "title": "Nocturne of Glass Orchards",
+    "model": "fal-ai/fast-sdxl",
+    "modelName": "Stable Diffusion XL",
+    "style": "cinematic hyperreal oil painting",
+    "prompt": "museum wall artwork, cinematic hyperreal oil painting of a moonlit glass orchard inside a misty conservatory, dramatic Rembrandt light, deep texture, gallery masterpiece, no text",
+    "src": "/artworks/north.jpg",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a09d/Ep3WKlwzey-j4SsoT0wDI.jpg"
+  },
+  {
+    "id": "east",
+    "title": "Brutalist Sun Garden",
+    "model": "fal-ai/flux/schnell",
+    "modelName": "FLUX.1 schnell",
+    "style": "architectural editorial realism",
+    "prompt": "museum wall artwork, architectural editorial realism, a brutalist concrete garden under a warm artificial sun, lush moss and water reflections, Hasselblad detail, no text",
+    "src": "/artworks/east.jpg",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a09d/yWvPe-gkS_lkvRMVTTWDR.jpg"
+  },
+  {
+    "id": "south",
+    "title": "The Velvet Machine",
+    "model": "fal-ai/recraft/v3/text-to-image",
+    "modelName": "Recraft V3",
+    "style": "luxury surreal poster realism",
+    "prompt": "museum wall artwork, luxury surreal poster realism, a velvet-covered antique machine blooming with white lilies, museum lighting, ultra-detailed, no typography, no text",
+    "src": "/artworks/south.jpg",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a09e/A2QAuZuPxyqnQS3Wlb9zP_image.webp"
+  },
+  {
+    "id": "west",
+    "title": "Rain Room Sonata",
+    "model": "fal-ai/imagen3/fast",
+    "modelName": "Imagen3 Fast",
+    "style": "soft photoreal cinematic",
+    "prompt": "museum wall artwork, soft photoreal cinematic scene of a quiet room made of rain and floating piano strings, silver reflections, minimal, no text",
+    "src": "/artworks/west.png",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a09f/hN47pcpI362GGlNyD0CVt_output.png"
+  },
+  {
+    "id": "partition-left",
+    "title": "A Map of Quiet Thunder",
+    "model": "fal-ai/ideogram/v2a/turbo",
+    "modelName": "Ideogram V2A Turbo",
+    "style": "graphic surreal realism",
+    "prompt": "museum wall artwork, graphic surreal realism, a topographic map made from quiet thunderclouds and brass contour lines, elegant composition, no words, no letters, no text",
+    "src": "/artworks/partition-left.png",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a0a0/zF5yOfIbxOFaaaXqCHkfm_image.png"
+  },
+  {
+    "id": "partition-right",
+    "title": "Porcelain Aurora",
+    "model": "fal-ai/flux-2/flash",
+    "modelName": "Flux 2 Flash",
+    "style": "dreamlike gallery realism",
+    "prompt": "museum wall artwork, dreamlike gallery realism, porcelain mountains under a green aurora, glossy ceramic textures, serene depth, no text",
+    "src": "/artworks/partition-right.png",
+    "falUrl": "https://v3b.fal.media/files/b/0a99a0bb/4wx5Btt6ZNK8tPRCZShzT_ohSsdI8R.png"
+  }
+]
