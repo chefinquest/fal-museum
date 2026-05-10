@@ -24,10 +24,11 @@ type Placement = Artwork & {
   lightPosition: [number, number, number]
 }
 
-const ROOM = 15
+const ROOM = 22
 const HALF = ROOM / 2
-const WALL_HEIGHT = 4.2
-const WALL_THICKNESS = 0.28
+// 15.5 world units reads as ~50+ ft at human eye scale.
+const WALL_HEIGHT = 15.5
+const WALL_THICKNESS = 0.32
 const PLAYER_RADIUS = 0.36
 const START_POSITION: [number, number, number] = [-5.15, 1.65, 4.85]
 const START_YAW = -0.72
@@ -69,40 +70,85 @@ function useMuseumTexture(kind: 'floor' | 'wall' | 'ceiling') {
     canvas.width = 1024
     canvas.height = 1024
     const ctx = canvas.getContext('2d')!
-    ctx.fillStyle = kind === 'floor' ? '#6b4f39' : kind === 'wall' ? '#e8e3d8' : '#d9d5cd'
-    ctx.fillRect(0, 0, 1024, 1024)
 
     if (kind === 'floor') {
-      for (let x = 0; x < 1024; x += 128) {
-        const hue = 24 + Math.random() * 12
-        ctx.fillStyle = `hsl(${hue}, 32%, ${34 + Math.random() * 20}%)`
-        ctx.fillRect(x + 2, 0, 124, 1024)
-        for (let y = 0; y < 1024; y += 14) {
-          ctx.strokeStyle = `rgba(255,255,255,${0.035 + Math.random() * 0.035})`
-          ctx.beginPath(); ctx.moveTo(x + 8, y + Math.random() * 5); ctx.lineTo(x + 120, y + Math.random() * 5); ctx.stroke()
+      const gradient = ctx.createLinearGradient(0, 1024, 1024, 0)
+      gradient.addColorStop(0, '#dde8ff')
+      gradient.addColorStop(.22, '#f6f0ff')
+      gradient.addColorStop(.48, '#e9fff7')
+      gradient.addColorStop(.72, '#fff3df')
+      gradient.addColorStop(1, '#dce7ff')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, 1024, 1024)
+
+      for (let i = 0; i < 34; i++) {
+        const y = 80 + i * 27 + Math.sin(i * 1.7) * 18
+        const ribbon = ctx.createLinearGradient(0, y - 70, 1024, y + 70)
+        ribbon.addColorStop(0, `rgba(90, 160, 255, ${0.02 + (i % 5) * 0.006})`)
+        ribbon.addColorStop(.5, `rgba(255, 255, 255, ${0.08 + (i % 4) * 0.012})`)
+        ribbon.addColorStop(1, `rgba(195, 120, 255, ${0.025 + (i % 3) * 0.008})`)
+        ctx.strokeStyle = ribbon
+        ctx.lineWidth = 18 + (i % 6) * 4
+        ctx.beginPath()
+        ctx.moveTo(-80, y)
+        for (let x = -80; x <= 1100; x += 90) {
+          ctx.lineTo(x, y + Math.sin((x + i * 45) * 0.009) * 42)
         }
+        ctx.stroke()
+      }
+
+      for (let i = 0; i < 1600; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${Math.random() * .18})`
+        ctx.fillRect(Math.random() * 1024, Math.random() * 1024, 1.2, 1.2)
+      }
+    } else if (kind === 'wall') {
+      ctx.fillStyle = '#f8f8f4'
+      ctx.fillRect(0, 0, 1024, 1024)
+      const glow = ctx.createRadialGradient(512, 210, 80, 512, 420, 850)
+      glow.addColorStop(0, 'rgba(255,255,255,.9)')
+      glow.addColorStop(1, 'rgba(222,226,228,.22)')
+      ctx.fillStyle = glow
+      ctx.fillRect(0, 0, 1024, 1024)
+
+      for (let i = 0; i < 70; i++) {
+        ctx.strokeStyle = `rgba(${150 + Math.random() * 45}, ${156 + Math.random() * 45}, ${165 + Math.random() * 50}, ${0.08 + Math.random() * 0.12})`
+        ctx.lineWidth = .7 + Math.random() * 2.2
+        ctx.beginPath()
+        const startX = Math.random() * 1024
+        ctx.moveTo(startX, -40)
+        for (let y = -40; y < 1100; y += 72) {
+          ctx.lineTo(startX + Math.sin(y * 0.012 + i) * 42 + (Math.random() - .5) * 42, y)
+        }
+        ctx.stroke()
+      }
+      for (let i = 0; i < 4200; i++) {
+        ctx.fillStyle = `rgba(70,76,86,${Math.random() * .045})`
+        ctx.fillRect(Math.random() * 1024, Math.random() * 1024, 1.1, 1.1)
       }
     } else {
-      for (let y = 0; y < 1024; y += 74) {
-        const offset = (Math.floor(y / 74) % 2) * 90
-        for (let x = -offset; x < 1024; x += 180) {
-          ctx.fillStyle = `rgba(255,255,255,${0.05 + Math.random() * 0.08})`
-          ctx.fillRect(x + 2, y + 2, 176, 70)
-          ctx.strokeStyle = kind === 'wall' ? 'rgba(120,115,105,.24)' : 'rgba(110,105,100,.12)'
-          ctx.strokeRect(x + 2, y + 2, 176, 70)
-        }
-      }
-      for (let i = 0; i < 4500; i++) {
-        const a = kind === 'wall' ? 0.05 : 0.035
-        ctx.fillStyle = `rgba(55,50,45,${Math.random() * a})`
-        ctx.fillRect(Math.random() * 1024, Math.random() * 1024, 1.4, 1.4)
+      const gradient = ctx.createRadialGradient(512, 512, 20, 512, 512, 720)
+      gradient.addColorStop(0, '#ffffff')
+      gradient.addColorStop(.2, '#fbfdff')
+      gradient.addColorStop(.58, '#e8f2ff')
+      gradient.addColorStop(1, '#cfdff0')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, 1024, 1024)
+      for (let i = 0; i < 26; i++) {
+        ctx.strokeStyle = `rgba(255,255,255,${0.13 + Math.random() * .18})`
+        ctx.lineWidth = 12 + Math.random() * 42
+        ctx.beginPath()
+        const y = Math.random() * 1024
+        ctx.moveTo(-120, y)
+        ctx.bezierCurveTo(220, y - 140 + Math.random() * 280, 760, y - 180 + Math.random() * 360, 1140, y + Math.random() * 160)
+        ctx.stroke()
       }
     }
+
     const texture = new THREE.CanvasTexture(canvas)
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-    texture.repeat.set(kind === 'floor' ? 5 : 3, kind === 'floor' ? 5 : 2)
+    texture.repeat.set(kind === 'floor' ? 1.25 : kind === 'wall' ? 2.2 : 1, kind === 'floor' ? 1.25 : kind === 'wall' ? 3.4 : 1)
     texture.colorSpace = THREE.SRGBColorSpace
-    texture.anisotropy = 8
+    texture.anisotropy = 12
     return texture
   }, [kind])
 }
@@ -172,22 +218,23 @@ function GalleryWalls() {
   const floorMap = useMuseumTexture('floor')
   const wallMap = useMuseumTexture('wall')
   const ceilingMap = useMuseumTexture('ceiling')
-  const wallMat = <meshStandardMaterial map={wallMap} roughness={0.82} color="#f3efe6" />
+  const wallMat = <meshPhysicalMaterial map={wallMap} roughness={0.36} metalness={0.02} clearcoat={0.55} clearcoatRoughness={0.22} color="#ffffff" />
   return (
     <group>
       <mesh receiveShadow rotation-x={-Math.PI / 2} position={[0, 0, 0]}>
-        <planeGeometry args={[ROOM, ROOM, 96, 96]} />
-        <meshStandardMaterial map={floorMap} roughness={0.64} metalness={0.02} />
+        <planeGeometry args={[ROOM, ROOM, 128, 128]} />
+        <meshPhysicalMaterial map={floorMap} roughness={0.28} metalness={0.04} clearcoat={0.82} clearcoatRoughness={0.18} color="#ffffff" />
       </mesh>
       <mesh receiveShadow position={[0, WALL_HEIGHT, 0]} rotation-x={Math.PI / 2}>
-        <planeGeometry args={[ROOM, ROOM, 64, 64]} />
-        <meshStandardMaterial map={ceilingMap} color="#ebe8e1" roughness={0.9} />
+        <planeGeometry args={[ROOM, ROOM, 96, 96]} />
+        <meshStandardMaterial map={ceilingMap} color="#f8fbff" roughness={0.74} emissive="#dcecff" emissiveIntensity={0.55} toneMapped={false} />
       </mesh>
+      <HeavenCeiling />
       <Wall position={[0, WALL_HEIGHT / 2, -HALF]} size={[ROOM, WALL_HEIGHT, WALL_THICKNESS]}>{wallMat}</Wall>
       <Wall position={[0, WALL_HEIGHT / 2, HALF]} size={[ROOM, WALL_HEIGHT, WALL_THICKNESS]}>{wallMat}</Wall>
       <Wall position={[-HALF, WALL_HEIGHT / 2, 0]} size={[WALL_THICKNESS, WALL_HEIGHT, ROOM]}>{wallMat}</Wall>
       <Wall position={[HALF, WALL_HEIGHT / 2, 0]} size={[WALL_THICKNESS, WALL_HEIGHT, ROOM]}>{wallMat}</Wall>
-      <Baseboards />
+      <FutureTrim />
     </group>
   )
 }
@@ -196,13 +243,42 @@ function Wall({ position, size, children }: { position: [number, number, number]
   return <mesh castShadow receiveShadow position={position}><boxGeometry args={size} />{children}</mesh>
 }
 
-function Baseboards() {
-  const mat = <meshStandardMaterial color="#b69a76" roughness={0.55} />
-  const pieces: Array<[[number, number, number], [number, number, number]]> = [
-    [[0, .17, -HALF + .08], [ROOM, .18, .12]], [[0, .17, HALF - .08], [ROOM, .18, .12]],
-    [[-HALF + .08, .17, 0], [.12, .18, ROOM]], [[HALF - .08, .17, 0], [.12, .18, ROOM]],
+function HeavenCeiling() {
+  const beams = [
+    [-5.8, -4.8, 2.4], [-2.2, -5.4, 2.1], [1.9, -4.9, 2.7], [5.7, -4.6, 2.2],
+    [-4.6, 0, 2.6], [0, 0, 3.2], [4.7, 0, 2.6],
+    [-5.6, 4.9, 2.2], [-1.8, 5.3, 2.8], [2.4, 4.9, 2.3], [6.0, 4.4, 2.0],
+  ] as const
+  return (
+    <group>
+      <mesh position={[0, WALL_HEIGHT - .035, 0]} rotation-x={Math.PI / 2}>
+        <circleGeometry args={[6.4, 96]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.62} depthWrite={false} toneMapped={false} />
+      </mesh>
+      <mesh position={[0, WALL_HEIGHT - .05, 0]} rotation-x={Math.PI / 2}>
+        <ringGeometry args={[3.8, 9.6, 128]} />
+        <meshBasicMaterial color="#dcecff" transparent opacity={0.24} depthWrite={false} side={THREE.DoubleSide} toneMapped={false} />
+      </mesh>
+      {beams.map(([x, z, radius], i) => (
+        <mesh key={i} position={[x, WALL_HEIGHT - .08, z]} rotation-x={Math.PI / 2}>
+          <circleGeometry args={[radius, 48]} />
+          <meshBasicMaterial color={i % 3 === 0 ? '#fff8e8' : '#eff8ff'} transparent opacity={0.28} depthWrite={false} toneMapped={false} />
+        </mesh>
+      ))}
+    </group>
+  )
+}
+
+function FutureTrim() {
+  const mat = <meshStandardMaterial color="#d7eaff" emissive="#9ccfff" emissiveIntensity={0.55} roughness={0.28} toneMapped={false} />
+  const darkMat = <meshPhysicalMaterial color="#ffffff" roughness={0.24} metalness={0.05} clearcoat={0.8} clearcoatRoughness={0.18} />
+  const lightRails: Array<[[number, number, number], [number, number, number]]> = [
+    [[0, .08, -HALF + .09], [ROOM, .05, .08]], [[0, .08, HALF - .09], [ROOM, .05, .08]],
+    [[-HALF + .09, .08, 0], [.08, .05, ROOM]], [[HALF - .09, .08, 0], [.08, .05, ROOM]],
+    [[0, 3.8, -HALF + .1], [ROOM, .035, .05]], [[0, 3.8, HALF - .1], [ROOM, .035, .05]],
+    [[-HALF + .1, 3.8, 0], [.05, .035, ROOM]], [[HALF - .1, 3.8, 0], [.05, .035, ROOM]],
   ]
-  return <>{pieces.map(([p, s], i) => <mesh key={i} position={p} castShadow receiveShadow><boxGeometry args={s}/>{mat}</mesh>)}</>
+  return <>{lightRails.map(([p, s], i) => <mesh key={`rail-${i}`} position={p} castShadow receiveShadow><boxGeometry args={s}/>{i < 4 ? mat : darkMat}</mesh>)}</>
 }
 
 function ArtworkFrame({ art }: { art: Placement }) {
@@ -210,21 +286,21 @@ function ArtworkFrame({ art }: { art: Placement }) {
   texture.colorSpace = THREE.SRGBColorSpace
   return (
     <group position={art.position} rotation={art.rotation}>
-      <mesh castShadow position={[0, 0, -0.035]}>
-        <boxGeometry args={[2.68, 2.04, .12]} />
-        <meshStandardMaterial color="#b99762" roughness={0.38} metalness={0.18} />
+      <mesh castShadow position={[0, 0, -0.045]}>
+        <boxGeometry args={[2.82, 2.14, .09]} />
+        <meshPhysicalMaterial color="#f9fcff" roughness={0.2} metalness={0.18} clearcoat={0.9} clearcoatRoughness={0.12} />
       </mesh>
-      <mesh castShadow position={[0, 0, .03]}>
-        <boxGeometry args={[2.36, 1.72, .06]} />
-        <meshStandardMaterial color="#171514" roughness={0.35} />
+      <mesh castShadow position={[0, 0, .02]}>
+        <boxGeometry args={[2.46, 1.82, .045]} />
+        <meshStandardMaterial color="#edf7ff" emissive="#bde8ff" emissiveIntensity={0.18} roughness={0.28} toneMapped={false} />
       </mesh>
-      <mesh castShadow position={[0, 0, .075]}>
-        <planeGeometry args={[2.18, 1.54]} />
-        <meshStandardMaterial map={texture} roughness={0.46} toneMapped={false} />
+      <mesh castShadow position={[0, 0, .078]}>
+        <planeGeometry args={[2.22, 1.58]} />
+        <meshStandardMaterial map={texture} roughness={0.32} toneMapped={false} />
       </mesh>
-      <mesh position={[0, -1.23, .06]} castShadow>
-        <boxGeometry args={[2.3, .38, .035]} />
-        <meshStandardMaterial color="#f7f0df" roughness={0.58} />
+      <mesh position={[0, -1.24, .07]} castShadow>
+        <boxGeometry args={[2.22, .28, .025]} />
+        <meshPhysicalMaterial color="#fbfdff" roughness={0.24} metalness={0.06} clearcoat={0.7} />
       </mesh>
       <Html position={art.labelPosition} transform occlude distanceFactor={3.2} className="art-label">
         <strong>{art.title}</strong>
@@ -237,12 +313,13 @@ function ArtworkFrame({ art }: { art: Placement }) {
 function MuseumLighting({ placements }: { placements: Placement[] }) {
   return (
     <>
-      <ambientLight intensity={0.34} />
-      <hemisphereLight args={['#fff4df', '#7d8794', 0.42]} />
-      <directionalLight position={[4, 8, 6]} intensity={1.25} castShadow shadow-mapSize={[2048, 2048]} />
-      {[-4.6, 0, 4.6].map((x) => <pointLight key={x} position={[x, 3.72, -3.3]} intensity={1.2} distance={8.5} color="#fff1d4" castShadow />)}
-      {[-4.6, 0, 4.6].map((x) => <pointLight key={'b'+x} position={[x, 3.72, 3.3]} intensity={1.1} distance={8.5} color="#fff1d4" />)}
-      {placements.map((art) => <spotLight key={art.id} position={art.lightPosition} target-position={art.position} angle={0.48} penumbra={0.62} intensity={1.9} distance={5.2} color="#ffe6bd" castShadow />)}
+      <ambientLight intensity={0.62} />
+      <hemisphereLight args={['#ffffff', '#c9d9ee', 0.82]} />
+      <directionalLight position={[0, WALL_HEIGHT - 1.2, 2]} intensity={2.2} castShadow shadow-mapSize={[2048, 2048]} color="#fff8ea" />
+      <rectAreaLight position={[0, WALL_HEIGHT - .35, 0]} rotation={[-Math.PI / 2, 0, 0]} width={15} height={15} intensity={7.5} color="#f5fbff" />
+      {[-7.2, -2.4, 2.4, 7.2].map((x) => <pointLight key={x} position={[x, 8.8, -7.2]} intensity={1.6} distance={14} color="#e8f6ff" castShadow />)}
+      {[-7.2, -2.4, 2.4, 7.2].map((x) => <pointLight key={'b'+x} position={[x, 8.8, 7.2]} intensity={1.45} distance={14} color="#fff4df" />)}
+      {placements.map((art) => <spotLight key={art.id} position={art.lightPosition} target-position={art.position} angle={0.44} penumbra={0.78} intensity={2.35} distance={8} color="#f4fbff" castShadow />)}
     </>
   )
 }
@@ -250,12 +327,12 @@ function MuseumLighting({ placements }: { placements: Placement[] }) {
 function SculpturalDetails() {
   return (
     <group>
-      <mesh castShadow receiveShadow position={[-3.3, .16, -.7]}><cylinderGeometry args={[.7, .82, .32, 32]} /><meshStandardMaterial color="#c7c2b8" roughness={.72} /></mesh>
-      <mesh castShadow position={[-3.3, 1.03, -.7]}><icosahedronGeometry args={[.62, 3]} /><meshStandardMaterial color="#bfc5c9" roughness={.48} metalness={.04} /></mesh>
-      <mesh castShadow position={[-3.0, 1.66, -.42]} rotation={[.2,0,.35]}><sphereGeometry args={[.22, 32, 16]} /><meshStandardMaterial color="#d0d4d5" roughness={.5} /></mesh>
-      <mesh castShadow receiveShadow position={[3.9, .22, 2.2]}><boxGeometry args={[1.8,.44,.72]} /><meshStandardMaterial color="#8d6746" roughness={.48} /></mesh>
-      <mesh castShadow receiveShadow position={[3.9,.64,2.2]}><boxGeometry args={[1.65,.12,.64]} /><meshStandardMaterial color="#c7aa83" roughness={.5} /></mesh>
-      <mesh receiveShadow position={[0, .012, 0]} rotation-x={-Math.PI / 2}><circleGeometry args={[2.35, 64]} /><meshStandardMaterial color="#d8c8a6" roughness={.8} side={THREE.DoubleSide} /></mesh>
+      <mesh castShadow receiveShadow position={[-3.3, .18, -.7]}><cylinderGeometry args={[.66, .9, .36, 48]} /><meshPhysicalMaterial color="#f7faff" roughness={.18} metalness={.04} clearcoat={.85} /></mesh>
+      <mesh castShadow position={[-3.3, 1.06, -.7]}><icosahedronGeometry args={[.62, 3]} /><meshPhysicalMaterial color="#dcecff" roughness={.24} metalness={.18} clearcoat={.7} transmission={0.15} /></mesh>
+      <mesh castShadow position={[-3.0, 1.7, -.42]} rotation={[.2,0,.35]}><sphereGeometry args={[.22, 32, 16]} /><meshStandardMaterial color="#ffffff" emissive="#bde8ff" emissiveIntensity={0.35} toneMapped={false} roughness={.25} /></mesh>
+      <mesh castShadow receiveShadow position={[3.9, .22, 2.2]}><boxGeometry args={[1.8,.44,.72]} /><meshPhysicalMaterial color="#f9fcff" roughness={.18} metalness={.06} clearcoat={.75} /></mesh>
+      <mesh castShadow receiveShadow position={[3.9,.64,2.2]}><boxGeometry args={[1.65,.1,.64]} /><meshStandardMaterial color="#dcecff" emissive="#9fd6ff" emissiveIntensity={0.18} toneMapped={false} roughness={.28} /></mesh>
+      <mesh receiveShadow position={[0, .016, 0]} rotation-x={-Math.PI / 2}><circleGeometry args={[3.25, 96]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.22} side={THREE.DoubleSide} toneMapped={false} /></mesh>
     </group>
   )
 }
@@ -264,18 +341,18 @@ function MuseumScene({ active }: { active: boolean }) {
   const placements = useMemo<Placement[]>(() => {
     const a = artworks as Artwork[]
     return [
-      { ...a[0], position: [-3.7, 2.18, -HALF + .19], rotation: [0, 0, 0], labelPosition: [0, -1.23, .13], lightPosition: [-3.7, 3.45, -5.35] },
-      { ...a[1], position: [HALF - .19, 2.18, -2.7], rotation: [0, -Math.PI / 2, 0], labelPosition: [0, -1.23, .13], lightPosition: [5.45, 3.45, -2.7] },
-      { ...a[2], position: [3.7, 2.18, HALF - .19], rotation: [0, Math.PI, 0], labelPosition: [0, -1.23, .13], lightPosition: [3.7, 3.45, 5.35] },
-      { ...a[3], position: [-HALF + .19, 2.18, 2.7], rotation: [0, Math.PI / 2, 0], labelPosition: [0, -1.23, .13], lightPosition: [-5.45, 3.45, 2.7] },
-      { ...a[4], position: [3.7, 2.18, -HALF + .19], rotation: [0, 0, 0], labelPosition: [0, -1.23, .13], lightPosition: [3.7, 3.45, -5.35] },
-      { ...a[5], position: [-3.7, 2.18, HALF - .19], rotation: [0, Math.PI, 0], labelPosition: [0, -1.23, .13], lightPosition: [-3.7, 3.45, 5.35] },
+      { ...a[0], position: [-5.2, 3.25, -HALF + .22], rotation: [0, 0, 0], labelPosition: [0, -1.28, .13], lightPosition: [-5.2, 5.35, -7.65] },
+      { ...a[1], position: [HALF - .22, 3.25, -4.8], rotation: [0, -Math.PI / 2, 0], labelPosition: [0, -1.28, .13], lightPosition: [7.65, 5.35, -4.8] },
+      { ...a[2], position: [5.2, 3.25, HALF - .22], rotation: [0, Math.PI, 0], labelPosition: [0, -1.28, .13], lightPosition: [5.2, 5.35, 7.65] },
+      { ...a[3], position: [-HALF + .22, 3.25, 4.8], rotation: [0, Math.PI / 2, 0], labelPosition: [0, -1.28, .13], lightPosition: [-7.65, 5.35, 4.8] },
+      { ...a[4], position: [5.2, 3.25, -HALF + .22], rotation: [0, 0, 0], labelPosition: [0, -1.28, .13], lightPosition: [5.2, 5.35, -7.65] },
+      { ...a[5], position: [-5.2, 3.25, HALF - .22], rotation: [0, Math.PI, 0], labelPosition: [0, -1.28, .13], lightPosition: [-5.2, 5.35, 7.65] },
     ]
   }, [])
   return (
     <>
-      <color attach="background" args={["#e7e1d6"]} />
-      <fog attach="fog" args={["#e7e1d6", 13, 25]} />
+      <color attach="background" args={["#f4f8ff"]} />
+      <fog attach="fog" args={["#f4f8ff", 22, 48]} />
       <SoftShadows size={24} samples={12} />
       <MuseumLighting placements={placements} />
       <GalleryWalls />
